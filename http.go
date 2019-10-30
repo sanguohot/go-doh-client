@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 // exchangeHTTPS sends a given query to a given resolver using a DoH POST
@@ -23,7 +24,9 @@ func exchangeHTTPS(q []byte, resolver string) (a []byte, err error) {
 	req.Header.Add("Accept", "application/dns-message")
 	req.Header.Add("Content-Type", "application/dns-message")
 
-	client := http.Client{}
+	client := http.Client{
+		Timeout: 3 * time.Second,
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return
